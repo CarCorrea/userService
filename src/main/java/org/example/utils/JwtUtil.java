@@ -11,9 +11,9 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private String key;
+    private static String key;
 
-    public String generateToken(String subject){
+    public static String generateToken(String subject){
         return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(new Date())
@@ -22,7 +22,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String extractUserName(String token){
+    public static String extractUserName(String token){
         return Jwts.parser()
                 .setSigningKey(key)
                 .parseClaimsJws(token)

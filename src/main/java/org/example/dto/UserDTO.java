@@ -18,7 +18,7 @@ public class UserDTO {
 
     private String name;
 
-    @NotBlank(message = "Debe ingresar un correo electrónico")
+    @NotBlank(message = "Este campo no puede estar vacio")
     private String email;
 
     @NotBlank(message = "Debe ingresar la contraseña")
