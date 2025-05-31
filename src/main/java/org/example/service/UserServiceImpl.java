@@ -3,7 +3,7 @@ package org.example.service;
 import org.example.dto.UserDTO;
 import org.example.dto.UserResponse;
 import org.example.entity.User;
-import org.example.exceptions.Error;
+import org.example.exceptions.CustomError;
 import org.example.repository.UserRepository;
 import org.example.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +23,19 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @Override
     public ResponseEntity<?> register(UserDTO userDTO){
-        Map<Predicate<String>, String> validate = Map.of(
-                email -> email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"), "Ingrese un correo electronico",
-                password -> password.matches("^(?=.*[A-Z])(?=(?:.*\\d){2})(?=.*[a-z]).{8,12}$"), "La contraseña debe tener solo una mayuscula, un maximo de 2 numeros y entre 8 a 12 caracteres"
-        );
 
-        Optional<String> error = validate.entrySet().stream()
-                .filter(entry -> !entry.getKey().test(entry.getKey() == validate.keySet().toArray()[0] ? userDTO.getEmail() : userDTO.getPassword()))
-                .map(Map.Entry::getValue)
-                .findFirst();
+        Optional<String> error = validateCredentials(userDTO);
 
-        Optional<ResponseEntity<Error>> errorResponse = Optional.ofNullable(error.orElse(null))
-                .map(msge -> ResponseEntity.badRequest().body(new Error(msge)));
+        Optional<ResponseEntity<CustomError>> errorResponse = error
+                .map(msge -> ResponseEntity.badRequest().body(new CustomError(msge)));
 
-        errorResponse = errorResponse.isEmpty() && userRepository.existByEmail(userDTO.getEmail())
-                ? Optional.of(ResponseEntity.status(HttpStatus.CONFLICT).body(new Error("El usuario ya existe en el sistema")))
+        errorResponse = errorResponse.isEmpty() && userRepository.existsByEmail(userDTO.getEmail())
+                ? Optional.of(ResponseEntity.status(HttpStatus.CONFLICT).body(new CustomError("El usuario ya existe en el sistema")))
                 : errorResponse;
 
         if(errorResponse.isPresent()) return errorResponse.get();
@@ -53,7 +49,7 @@ public class UserServiceImpl implements IUserService {
         user.setActive(true);
         user.setUserPhones(userDTO.getUserPhones());
 
-        String token = JwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail());
         user.setToken(token);
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(new UserResponse(savedUser));
@@ -64,10 +60,12 @@ public class UserServiceImpl implements IUserService {
     public ResponseEntity<?> login(String token) {
         return Optional.ofNullable(token)
                 .map(tkn -> tkn.replace("Bearer", ""))
-                .map(JwtUtil::extractUserName)
+                .map(token1 -> {
+                    return jwtUtil.extractUsername(token1);
+                })
                 .flatMap(email -> userRepository.findByEmail(email).map(user -> {
                     user.setLastLogin(LocalDateTime.now());
-                    String newToken = (JwtUtil.generateToken(email));
+                    String newToken = (jwtUtil.generateToken(email));
                     user.setToken(newToken);
                     userRepository.save(user);
                     return ResponseEntity.ok((Object) new UserResponse(user));
@@ -79,6 +77,24 @@ public class UserServiceImpl implements IUserService {
     public ResponseEntity<?> getUserById(UUID userId) {
         return userRepository.findById(userId)
                 .map(user -> ResponseEntity.ok((Object) new UserResponse(user)))
-                .orElseGet(()-> ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error("Usuario no existe")));
+                .orElseGet(()-> ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomError("Usuario no existe")));
+    }
+
+    private static Optional<String> validateCredentials(UserDTO userDTO) {
+        String email = userDTO.getEmail();
+        String password = userDTO.getPassword();
+        Map<String, Predicate<String>> validate = Map.of(
+                "Email inválido", e -> e.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"),
+                "La contraseña debe tener solo una mayúscula, un máximo de 2 números y entre 8 a 12 caracteres",
+                p -> p.matches("^(?=(?:[^A-Z]*[A-Z]){1}[^A-Z]*$)(?=(?:\\D*\\d){0,2}\\D*$)[A-Za-z\\d]{8,12}$")
+        );
+
+        return validate.entrySet().stream()
+                .filter(e -> {
+                    if (e.getKey().startsWith("Email")) return !e.getValue().test(email);
+                    return !e.getValue().test(password);
+                })
+                .map(Map.Entry::getKey)
+                .findFirst();
     }
 }

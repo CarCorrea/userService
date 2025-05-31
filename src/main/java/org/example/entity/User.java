@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -39,6 +38,5 @@ public class User {
     private boolean isActive;
 
     private String token;
-
 
 }

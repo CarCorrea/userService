@@ -1,32 +1,46 @@
 package org.example.utils;
 
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import io.jsonwebtoken.security.Keys;
 
-import javax.persistence.Entity;
-import java.awt.*;
+import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private static String key;
+    @Value("${jwt.secret}")
+    private String key;
 
-    public static String generateToken(String subject){
+    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
+
+    public String generateToken(String subject) {
         return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-                .signWith(SignatureAlgorithm.HS256, key)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public static String extractUserName(String token){
-        return Jwts.parser()
-                .setSigningKey(key)
+    public String extractUsername(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    private Key getSigningKey() {
+        if (key == null || key.isBlank()) {
+            throw new IllegalArgumentException("La clave secreta (jwt.secret) no puede estar vacía.");
+        }
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
     }
 }
