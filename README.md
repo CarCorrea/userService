@@ -1,4 +1,4 @@
-Descripción
+
 Este proyecto es un microservicio REST desarrollado en Spring Boot, diseñado para la creación y consulta de usuarios siguiendo estándares de arquitectura y validaciones específicas. Se basa en una estructura modular con capas bien definidas y autenticación mediante JWT.
 Tecnologías utilizadas
 - Java 11
