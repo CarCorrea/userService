@@ -25,23 +25,23 @@ El sistema sigue un modelo basado en MVC (Modelo-Vista-Controlador) y se compone
 - Incluye validaciones de email y contraseña mediante expresiones regulares.
 
 Pasos:
-1 - Clonar el repositorio:
+##1 - Clonar el repositorio:
 
 git clone https://github.com/CarCorrea/userService.git
 
-2 - Compilar y ejecutar el servicio:
+##2 - Compilar y ejecutar el servicio:
 ./gradlew build
 ./gradlew bootRun
 
-3 - Acceder a los endpoints:
+##3 - Acceder a los endpoints:
 /userService
 POST /user-registration
 POST /login
 GET /{id}
 
-Endpoints del sistema
+#Endpoints del sistema
 
-1. Creación de usuario (POST /user-registration)
+##1. Creación de usuario (POST /user-registration)\
   {
   "name": "Juan Pérez2",
   "email": "juan.perez2@example.com",
@@ -55,7 +55,7 @@ Endpoints del sistema
   ]
 }
 
-Ejemplo de salida: 
+#Ejemplo de salida: 
 {
     "userId": "27ac31c6-27aa-4faa-affa-72e4b16df72b",
     "email": "juan.perez2@example.com",
@@ -65,7 +65,7 @@ Ejemplo de salida:
     "active": true
 }
 
-Ejemplo en caso de error en la entrada
+#Ejemplo en caso de error en la entrada
 {
     "error": [
         {
@@ -76,10 +76,10 @@ Ejemplo en caso de error en la entrada
     ]
 }
 
-2. Autenticación de usuario (POST /login)
+##2. Autenticación de usuario (POST /login)
 
 Requiere el token generado en /sign-up
-Salida JSON en caso de éxito:
+#Salida JSON en caso de éxito:
 {
     "userId": "316c4a6f-2636-4efa-bbc8-d90abdf05205",
     "email": "juan.perez112@example.com",
@@ -89,9 +89,9 @@ Salida JSON en caso de éxito:
     "active": true
 }
 
-3. Buscar Usuario (GET /{id}
+##3. Buscar Usuario (GET /{id}
 Requiere el token generado en /sign-up
-Salida JSON en caso de éxito:
+#Salida JSON en caso de éxito:
 
 {
     "userId": "316c4a6f-2636-4efa-bbc8-d90abdf05205",
