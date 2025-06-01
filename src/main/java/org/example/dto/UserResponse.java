@@ -1,14 +1,15 @@
 package org.example.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.example.entity.User;
 
 import java.util.UUID;
 
 @Getter
 @Setter
-public class UserResponse {
+@AllArgsConstructor
+@NoArgsConstructor
+@Data public class UserResponse {
 
     private UUID userId;
 

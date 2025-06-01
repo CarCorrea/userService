@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.dto.UserDTO;
+import org.example.dto.UserResponse;
 import org.example.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -38,22 +38,24 @@ public class UserServiceImpl implements IUserService {
                 ? Optional.of(ResponseEntity.status(HttpStatus.CONFLICT).body(new CustomError("El usuario ya existe en el sistema")))
                 : errorResponse;
 
-        if(errorResponse.isPresent()) return errorResponse.get();
+        if(errorResponse.isPresent()){
+            return errorResponse.get();
+        }
+        else{
+            User user = new User();
+            user.setName(userDTO.getName());
+            user.setEmail(userDTO.getEmail());
+            user.setPassword(userDTO.getPassword());
+            user.setDateCreated(LocalDateTime.now());
+            user.setLastLogin(LocalDateTime.now());
+            user.setActive(true);
+            user.setUserPhones(userDTO.getUserPhones());
 
-        User user = new User();
-        user.setName(userDTO.getName());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
-        user.setDateCreated(LocalDateTime.now());
-        user.setLastLogin(LocalDateTime.now());
-        user.setActive(true);
-        user.setUserPhones(userDTO.getUserPhones());
-
-        String token = jwtUtil.generateToken(user.getEmail());
-        user.setToken(token);
-        User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(new UserResponse(savedUser));
-
+            String token = jwtUtil.generateToken(user.getEmail());
+            user.setToken(token);
+            User savedUser = userRepository.save(user);
+            return ResponseEntity.ok(new UserResponse(savedUser));
+        }
     }
 
     @Override
