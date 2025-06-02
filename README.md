@@ -11,7 +11,7 @@ Tecnologías utilizadas
 Arquitectura del sistema
 El sistema sigue un modelo basado en MVC (Modelo-Vista-Controlador) y se compone de los siguientes elementos:
 - Controlador (UserController)
-- Maneja las solicitudes HTTP (/sign-up y /login).
+- Maneja las solicitudes HTTP (/user-registration y /login).
 - Retorna respuestas en formato JSON con códigos HTTP adecuados.
 - Servicio (UserService)
 - Contiene la lógica de negocio.
