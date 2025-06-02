@@ -42,64 +42,64 @@ GET /{id}
 #Endpoints del sistema
 
 ##1. Creación de usuario (POST /user-registration)\
-  {
-  "name": "Juan Pérez2",
-  "email": "juan.perez2@example.com",
-  "password": "Abcdefg1",
-  "phones": [
-    {
-      "number": 123456789,
-      "citycode": 1,
-      "countrycode": 57
-    }
-  ]
+  {\
+  "name": "Juan Pérez2",\
+  "email": "juan.perez2@example.com",\
+  "password": "Abcdefg1",\
+  "phones": [\
+    {\
+      "number": 123456789,\
+      "citycode": 1,\
+      "countrycode": 57\
+    }\
+  ]\
+}\
+
+#Ejemplo de salida:\ 
+{\
+    "userId": "27ac31c6-27aa-4faa-affa-72e4b16df72b",\
+    "email": "juan.perez2@example.com",\
+    "dateCreated": "2025-06-01T19:46:13.074725500",\
+    "lastLogin": "2025-06-01T19:46:13.074725500",\
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWFuLnBlcmV6MkBleGFtcGxlLmNvbSIsImlhdCI6MTc0ODgyMTU3MywiZXhwIjoxNzQ4OTA3OTczfQ.HmHnFbbt6i0R2eghYUfZjwb7JK7Kjo4SEQP8Akw8kGw",\
+    "active": true\
 }
 
-#Ejemplo de salida: 
-{
-    "userId": "27ac31c6-27aa-4faa-affa-72e4b16df72b",
-    "email": "juan.perez2@example.com",
-    "dateCreated": "2025-06-01T19:46:13.074725500",
-    "lastLogin": "2025-06-01T19:46:13.074725500",
-    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWFuLnBlcmV6MkBleGFtcGxlLmNvbSIsImlhdCI6MTc0ODgyMTU3MywiZXhwIjoxNzQ4OTA3OTczfQ.HmHnFbbt6i0R2eghYUfZjwb7JK7Kjo4SEQP8Akw8kGw",
-    "active": true
-}
-
-#Ejemplo en caso de error en la entrada
-{
-    "error": [
-        {
-            "code": 400,
-            "description": "La contraseña debe tener solo una mayúscula, un máximo de 2 números y entre 8 a 12 caracteres",
-            "timestamp": "2025-06-01T19:47:09.3517018"
-        }
-    ]
-}
+#Ejemplo en caso de error en la entrada\
+{\
+    "error": [\
+        {\
+            "code": 400,\
+            "description": "La contraseña debe tener solo una mayúscula, un máximo de 2 números y entre 8 a 12 caracteres",\
+            "timestamp": "2025-06-01T19:47:09.3517018"\
+        }\
+    ]\
+}\
 
 ##2. Autenticación de usuario (POST /login)
 
 Requiere el token generado en /sign-up
-#Salida JSON en caso de éxito:
-{
-    "userId": "316c4a6f-2636-4efa-bbc8-d90abdf05205",
-    "email": "juan.perez112@example.com",
-    "dateCreated": "2025-06-01T19:49:06.503207",
-    "lastLogin": "2025-06-01T19:49:21.845759700",
-    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWFuLnBlcmV6MTEyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzQ4ODIxNzYxLCJleHAiOjE3NDg5MDgxNjF9.VMET8ndmMORfM_C3r7acqSirRXMESxp_juhnjoEzZQU",
-    "active": true
-}
+#Salida JSON en caso de éxito:\
+{\
+    "userId": "316c4a6f-2636-4efa-bbc8-d90abdf05205",\
+    "email": "juan.perez112@example.com",\
+    "dateCreated": "2025-06-01T19:49:06.503207",\
+    "lastLogin": "2025-06-01T19:49:21.845759700",\
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWFuLnBlcmV6MTEyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzQ4ODIxNzYxLCJleHAiOjE3NDg5MDgxNjF9.VMET8ndmMORfM_C3r7acqSirRXMESxp_juhnjoEzZQU",\
+    "active": true\
+}\
 
 ##3. Buscar Usuario (GET /{id}
 Requiere el token generado en /sign-up
 #Salida JSON en caso de éxito:
 
-{
-    "userId": "316c4a6f-2636-4efa-bbc8-d90abdf05205",
-    "email": "juan.perez112@example.com",
-    "dateCreated": "2025-06-01T19:49:06.503207",
-    "lastLogin": "2025-06-01T19:49:21.845760",
-    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWFuLnBlcmV6MTEyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzQ4ODIxNzYxLCJleHAiOjE3NDg5MDgxNjF9.VMET8ndmMORfM_C3r7acqSirRXMESxp_juhnjoEzZQU",
-    "active": true
+{\
+    "userId": "316c4a6f-2636-4efa-bbc8-d90abdf05205",\
+    "email": "juan.perez112@example.com",\
+    "dateCreated": "2025-06-01T19:49:06.503207",\
+    "lastLogin": "2025-06-01T19:49:21.845760",\
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWFuLnBlcmV6MTEyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzQ4ODIxNzYxLCJleHAiOjE3NDg5MDgxNjF9.VMET8ndmMORfM_C3r7acqSirRXMESxp_juhnjoEzZQU",\
+    "active": true\
 }
 
 - Creación de usuario
